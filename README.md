@@ -7,4 +7,4 @@ Screenshots
 ![alt text](darkflutter.png)
 
 
-![alt_text](lightflutter.png)
+![alt_text](lightFlutter.png)
