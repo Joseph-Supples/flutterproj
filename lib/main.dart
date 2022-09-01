@@ -27,18 +27,22 @@ class MyApp extends StatelessWidget {
                     title: const Text('Contacts'),
                     actions:
                     [
+                      // Button to change theme
                         IconButton(
                             onPressed: () {
+                              //checks if isDark is true, if it is, changes to false and vice versa
                               themeNotifier.isDark
                                   ? themeNotifier.isDark = false
                                   : themeNotifier.isDark = true;
                             },
+                            //sets icon and changes based on isDark
                             icon: Icon(
                               themeNotifier.isDark
                                   ? Icons.wb_sunny : Icons.nightlight_round))
                     ],
                   ),
                   body: const Center(
+                      //ContactList is displayed here
                       child: ContactList()
                   ),
                 );
@@ -52,6 +56,7 @@ class MyApp extends StatelessWidget {
   }
 }
 class Contact {
+  //Contact class and constructor
   String first_name;
   String last_name;
   String address;
@@ -83,6 +88,7 @@ class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      //itemCount accounts for dividers
       itemCount: contacts.length+3,
       padding: const EdgeInsets.all(16.0),
       itemBuilder: (context, index) {
