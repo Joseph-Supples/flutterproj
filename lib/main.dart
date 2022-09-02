@@ -85,36 +85,41 @@ class ContactList extends StatefulWidget {
 
 class _ContactListState extends State<ContactList> {
   var realindex = 0;
+  var lastChar = contacts[0].first_name[0];
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      //itemCount accounts for dividers
-      itemCount: contacts.length+3,
+      //itemCount accounts for dividers and prevents going past range.
+      //Num
+      itemCount: contacts.length*2+3,
       padding: const EdgeInsets.all(16.0),
       itemBuilder: (context, index) {
-        if(index==0) {
-          realindex=0;
-          return ListTile(leading: Text('A'), textColor: Colors.grey);
-        }
-        if(index==4)
-        {
-            realindex=3;
-            return ListTile(leading: Text('B'), textColor: Colors.grey);
-        }
-        if(index==7)
-        {
-            realindex=5;
-            return ListTile(leading: Text('C'), textColor: Colors.grey);
-        }
-        realindex++;
-        return ListTile(
-          leading: Icon(Icons.contacts),
-          trailing: Text(contacts[realindex-1].address),
-          minVerticalPadding: 25,
-          title: Text(
-            contacts[realindex-1].first_name+" "+contacts[realindex-1].last_name
-          ),
-        );
+          if(realindex<contacts.length-1) {
+            if(index == 0)
+            {
+              return ListTile(leading: Text(lastChar), textColor: Colors.grey);
+            }
+            if (contacts[realindex + 1].first_name[0] != lastChar) {
+              lastChar = contacts[realindex + 1].first_name[0];
+              return ListTile(leading: Text(lastChar), textColor: Colors.grey);
+            }
+            if (index.isOdd) return const Divider(color: Colors.grey);
+            realindex = (index ~/ 2) - 1;
+
+
+            return ListTile(
+              leading: Icon(Icons.contacts),
+              trailing: Text(contacts[realindex].address),
+              minVerticalPadding: 25,
+              title: Text(
+                  contacts[realindex].first_name + " " +
+                      contacts[realindex].last_name
+              ),
+            );
+          }
+          else{
+            return Divider();
+          }
       },
     );
   }
