@@ -86,12 +86,24 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   var realindex = 0;
   var lastChar = contacts[0].first_name[0];
+  var numLets = 1;
+
   @override
   Widget build(BuildContext context) {
+    // calculates number of starting letters for first names to determine
+    // number of headers for itemcount
+    for(int i =0;i<contacts.length-1;i++)
+      {
+          if(contacts[i+1].first_name[0]!=contacts[i].first_name[0])
+            {
+              numLets++;
+            }
+      }
     return ListView.builder(
-      //itemCount accounts for dividers and prevents going past range.
-      //Num
-      itemCount: contacts.length*2+3,
+      //itemCount accounts for dividers and number of unique letters
+      // and prevents going past range.
+      //
+      itemCount: contacts.length*2+numLets,
       padding: const EdgeInsets.all(16.0),
       itemBuilder: (context, index) {
           if(realindex<contacts.length-1) {
