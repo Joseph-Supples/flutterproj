@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproj/AppTheme.dart';
 import 'package:flutterproj/theme_model.dart';
 import 'package:provider/provider.dart';
+
 
 
 void main() {
@@ -9,7 +11,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         builder: (context, ThemeModel themeNotifier, child) {
           return MaterialApp(
             title: 'Contacts',
-            theme: themeNotifier.isDark ? ThemeData.dark() : ThemeData.light(),
+            theme: themeNotifier.isDark ?  AppTheme.darkTheme : AppTheme.lightTheme,
             home:
              Consumer(
               builder: (context, ThemeModel themeNotifier, child) {
@@ -88,51 +89,74 @@ class _ContactListState extends State<ContactList> {
   var lastChar = contacts[0].first_name[0];
   var numLets = 1;
 
-  @override
-  Widget build(BuildContext context) {
-    // calculates number of starting letters for first names to determine
-    // number of headers for itemcount
-    for(int i =0;i<contacts.length-1;i++)
-      {
-          if(contacts[i+1].first_name[0]!=contacts[i].first_name[0])
-            {
-              numLets++;
-            }
-      }
-    return ListView.builder(
-      //itemCount accounts for dividers and number of unique letters
-      // and prevents going past range.
-      //
-      itemCount: contacts.length*2+numLets,
-      padding: const EdgeInsets.all(16.0),
-      itemBuilder: (context, index) {
-          if(realindex<contacts.length-1) {
-            if(index == 0)
-            {
-              return ListTile(leading: Text(lastChar), textColor: Colors.grey);
-            }
-            if (contacts[realindex + 1].first_name[0] != lastChar) {
-              lastChar = contacts[realindex + 1].first_name[0];
-              return ListTile(leading: Text(lastChar), textColor: Colors.grey);
-            }
-            if (index.isOdd) return const Divider(color: Colors.grey);
-            realindex = (index ~/ 2) - 1;
+        @override
+        Widget build(BuildContext context ) {
+          // calculates number of starting letters for first names to determine
+              // number of headers for itemcount
+              for(int i =0;i<contacts.length-1;i++)
+                {
+                    if(contacts[i+1].first_name[0]!=contacts[i].first_name[0])
+                      {
+                        numLets++;
+                      }
+                }
+              return ListView.builder(
+                  //itemCount accounts for dividers and number of unique letters
+                  // and prevents going past range.
+                  //
+                  itemCount: contacts.length*2+numLets,
+                  padding: const EdgeInsets.all(16.0),
+                  itemBuilder: (context, index) {
+                      if(realindex<contacts.length-1) {
+                        if(index == 0)
+                        {
+                          return ListTile(
+                              leading: Text(lastChar,
+                                  style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16
+                                   )
+                                  )
+                                );
+                        }
+                        if (contacts[realindex + 1].first_name[0] != lastChar) {
+                          lastChar = contacts[realindex + 1].first_name[0];
+                          return ListTile(
+                              leading: Text(lastChar,
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 16
+                                            )
+                                        ),
+                              );
+                        }
+                        if (index.isOdd) return const Divider(color: Colors.grey);
+                        realindex = (index ~/ 2) - 1;
 
 
-            return ListTile(
-              leading: Icon(Icons.contacts),
-              trailing: Text(contacts[realindex].address),
-              minVerticalPadding: 25,
-              title: Text(
-                  contacts[realindex].first_name + " " +
-                      contacts[realindex].last_name
-              ),
-            );
-          }
-          else{
-            return Divider();
-          }
-      },
-    );
-  }
+                        return ListTile(
+
+                          //To match design,
+                          // Account circle foreground color needs to change.
+                          // Imperfect solution: use CircleAvatar as a background color
+                          leading: Icon( Icons.account_circle, size: 25),
+                          trailing: Text(contacts[realindex].address,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            )
+                          ),
+                          minVerticalPadding: 10,
+                          title: Text(
+                              contacts[realindex].first_name + " " +
+                                  contacts[realindex].last_name
+                          ),
+                        );
+                      }
+                      else{
+                        return Divider();
+                      }
+                  },
+                );
+        }
 }
